@@ -1,0 +1,14 @@
+{
+    "bay_of_bengal": {
+        "sst": 29.5,
+        "fish_stock": 1200,
+        "oxygen": 5.8,
+        "catch": 300
+    },
+    "north_atlantic": {
+        "sst": 15.2,
+        "fish_stock": 800,
+        "oxygen": 6.5,
+        "catch": 200
+    }
+}
