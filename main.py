@@ -84,7 +84,7 @@ async def get_region_data(
         oxygen=indicators["oxygen"]
     )
     risk = risk_level(score)
-    rec = recommendation(score, indicators["catch"])
+    rec = recommendation(score, indicators["catch"],indicators["fish_stock"], indicators["sst"])
 
     response = {
         "region": region,

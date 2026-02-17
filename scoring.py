@@ -48,13 +48,19 @@ def risk_level(score: float) -> str:
         return "High"
 
 
-def recommendation(score: float, catch: float) -> str:
-    """
-    Generate a recommendation based on sustainability score and current catch.
-    """
-    if score >= 70:
-        return "Sustain current policies; ecosystem is healthy."
-    elif 40 <= score < 70:
-        return ("Consider moderate catch reductions to improve sustainability.")
-    else:
-        return ("Urgent catch reduction needed to prevent fish stock collapse.")
+def recommendation(score: float, catch: float, fish_stock: float = None, sst: float = None) -> str:
+
+    if score >= 75:
+        return "Maintain current fishing levels; ecosystem indicators show healthy resilience."
+
+    if 60 <= score < 75:
+        return "Introduce minor catch reductions (5–10%) and continue ecosystem monitoring."
+
+    if 45 <= score < 60:
+        return "Implement moderate catch reductions (10–25%) and increase stock recovery monitoring."
+
+    if 30 <= score < 45:
+        return "High ecosystem stress detected. Reduce catch by 25–40% and strengthen conservation controls."
+
+    return "Critical sustainability risk. Immediate large-scale catch reduction (>40%) and restoration measures recommended."
+
