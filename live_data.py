@@ -33,6 +33,7 @@ def get_region_bounds(region_key: str):
     return bounds
 
 async def fetch_noaa_data(region_key: str) -> dict:
+
     if not NOAA_API_TOKEN:
         raise HTTPException(status_code=401, detail="Missing NOAA_API_TOKEN environment variable")
 
@@ -58,11 +59,14 @@ async def fetch_noaa_data(region_key: str) -> dict:
     # Extract average SST from gridded data
     try:
         rows = data['table']['rows']
+        
+        print("Column names:", data['table']['columnNames'])
+        print("Sample row:", rows[0])
         if not rows:
              raise HTTPException(status_code=404, detail="No NOAA data found for the specified region and date")
         
         # Average all SST values in the bounding box
-        sst_values = [row[3] for row in rows if row[3] is not None]
+        sst_values = [row[4] for row in rows if row[4] is not None]
         if not sst_values:
             raise HTTPException(status_code=404, detail="All NOAA SST values in the bounding box are null")
             
