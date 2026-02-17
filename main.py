@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Query, HTTPException, Request
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 import json
 import os
@@ -8,8 +9,6 @@ import os
 from scoring import sustainability_score, risk_level, recommendation
 from live_data import fetch_live_region_data  # your live API fetch function
 
-
-import os
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -18,6 +17,15 @@ load_dotenv()
 print("NOAA_API_TOKEN:", os.getenv("NOAA_API_TOKEN"))
 
 app = FastAPI(title="Ocean–Climate–Fishery Integrated Decision Dashboard Backend")
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 DATA_FILE = os.path.join(os.path.dirname(__file__), "data.json")
 
