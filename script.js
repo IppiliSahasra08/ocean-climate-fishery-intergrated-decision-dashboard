@@ -2,28 +2,28 @@
 // Adjusted to avoid hitting land masses as much as possible
 const oceanPolygons = [
   {
-    name: "Pacific Ocean",
+    name: "Bay of Bengal",
+    key: "bay_of_bengal",
     coords: [
-      // A diamond shape in the middle of the Pacific to be safe
-      [20, -160], [0, -140], [-20, -160], [0, -180], [20, -160]
+      [5, 78], [22, 78], [22, 95], [5, 95], [5, 78]
     ],
-    color: 'rgba(0, 100, 255, 0.3)'
+    color: 'rgba(32, 178, 170, 0.4)'
   },
   {
-    name: "Atlantic Ocean",
+    name: "North Atlantic",
+    key: "north_atlantic",
     coords: [
-      // Narrow strip in the middle of the Atlantic
-      [30, -40], [0, -30], [-30, -40], [0, -50], [30, -40]
+      [30, -60], [60, -60], [60, -10], [30, -10], [30, -60]
     ],
     color: 'rgba(0, 255, 255, 0.3)'
   },
   {
-    name: "Indian Ocean",
+    name: "Eastern Pacific",
+    key: "eastern_pacific",
     coords: [
-      // Central Indian Ocean
-      [10, 80], [-10, 90], [-30, 80], [-10, 70], [10, 80]
+      [10, -130], [50, -130], [50, -70], [10, -70], [10, -130]
     ],
-    color: 'rgba(32, 178, 170, 0.3)'
+    color: 'rgba(0, 100, 255, 0.3)'
   }
 ];
 
@@ -46,8 +46,8 @@ const world = Globe()
       .polygonAltitude(d => d === hoverD ? 0.05 : 0.01); // Lift slightly on hover
   })
   .onPolygonClick(d => {
-    // Open Dashboard with the ocean name as a parameter
-    window.location.href = `dashboard.html?ocean=${encodeURIComponent(d.name)}`;
+    // Open Dashboard with the region key as a parameter
+    window.location.href = `dashboard.html?region=${encodeURIComponent(d.key)}`;
   })
 
   // Add Labels (Text)
@@ -69,7 +69,7 @@ const world = Globe()
   .labelResolution(2)
   .onLabelClick(d => {
     // Also allow clicking the text label to navigate
-    window.location.href = `dashboard.html?ocean=${encodeURIComponent(d.name)}`;
+    window.location.href = `dashboard.html?region=${encodeURIComponent(d.key)}`;
   });
 
 // Add rotation

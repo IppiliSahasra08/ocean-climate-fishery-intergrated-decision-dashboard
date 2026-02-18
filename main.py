@@ -5,14 +5,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 import json
 import os
+from dotenv import load_dotenv
+
+# Load environment variables FIRST
+load_dotenv()
 
 from scoring import sustainability_score, risk_level, recommendation
 from live_data import fetch_live_region_data  # your live API fetch function
-
-from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
 
 print("NOAA_API_TOKEN:", os.getenv("NOAA_API_TOKEN"))
 

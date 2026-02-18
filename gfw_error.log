@@ -1,2 +1,2 @@
 Status: 422
-Body: {"statusCode":422,"error":"Unprocessable Entity","messages":[{"title":"region","detail":"Region not found"}]}
+Body: {"statusCode":422,"error":"Unprocessable Entity","messages":[{"title":"spatial-resolution","detail":"spatial-resolution could be LOW,HIGH"}]}
