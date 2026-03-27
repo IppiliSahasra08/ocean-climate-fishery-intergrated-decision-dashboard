@@ -8,8 +8,10 @@ from datetime import datetime, timedelta
 REGION_BOUNDS = {
     "bay_of_bengal": (78.0, 5.0, 95.0, 22.0),
     "north_atlantic": (-60.0, 30.0, -10.0, 60.0),
-    "eastern_pacific": (-130.0, 10.0, -70.0, 50.0),
+    "eastern_pacific": (-130.0, -10.0, -80.0, 20.0),
     "arabian_sea": (55.0, 5.0, 75.0, 25.0),
+    "mediterranean_sea": (5.0, 30.0, 35.0, 45.0),
+    "south_china_sea": (105.0, 0.0, 120.0, 25.0),
 }
 
 # GFW Region IDs (MRGIDs for public-eez-areas)
@@ -17,7 +19,9 @@ REGION_TO_GFW_REGION = {
     "bay_of_bengal": "8480",  # Indian EEZ
     "north_atlantic": "8456", # USA EEZ
     "eastern_pacific": "8429", # Mexico EEZ (Verified V3 MRGID)
-    "arabian_sea": "8354"     # Oman EEZ (Representative of Arabian Sea)
+    "arabian_sea": "8354",    # Oman EEZ (Representative of Arabian Sea)
+    "mediterranean_sea": "8476",
+    "south_china_sea": "8488"
 }
 
 # Fetch tokens directly in functions or using a small helper to avoid import timing issues
@@ -131,7 +135,17 @@ async def fetch_gfw_data(region_key: str) -> dict:
                         # GFW V3 can return 'hours', 'apparent_fishing_hours', or 'value'
                         total_fishing_hours += float(row.get("hours") or row.get("apparent_fishing_hours") or row.get("value") or 0)
                 elif isinstance(data, dict):
-                    total_fishing_hours = data.get("total_apparent_fishing_hours", data.get("hours", 0))
+                    for entry in data.get("entries", []):
+                        for k, v in entry.items():
+                            if k.startswith("public-global"):
+                                if isinstance(v, list):
+                                    for item in v:
+                                        total_fishing_hours += float(item.get("hours", item.get("apparent_fishing_hours", item.get("value", 0))))
+                                elif isinstance(v, (int, float)):
+                                    total_fishing_hours += float(v)
+                    
+                    if total_fishing_hours == 0:
+                        total_fishing_hours = data.get("total_apparent_fishing_hours", data.get("hours", 0))
                 
                 # If truly zero, provide a slightly randomized regional baseline so they don't look identical
                 if total_fishing_hours == 0:
@@ -141,9 +155,11 @@ async def fetch_gfw_data(region_key: str) -> dict:
                     total_fishing_hours = random.uniform(200, 600)
                     print(f"No live activity found for {region_key}. Using regional baseline: {total_fishing_hours}")
             
-            # Heuristic mapping
-            catch = 200 + (total_fishing_hours / 10)
-            fish_stock = 1500 - (total_fishing_hours / 5)
+            # Heuristic mapping: GFW live hours can be 10k - 100k+ in a bounding box.
+            # We scale it down to keep the heuristic values within realistic metrics (1000s of tons).
+            scaled_hours = total_fishing_hours / 200.0
+            catch = 200 + (scaled_hours / 1.5)
+            fish_stock = max(50.0, 1500 - scaled_hours)
             
         except Exception as e:
             print(f"GFW Exception: {str(e)}. Using simulated fallback.")
