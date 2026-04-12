@@ -72,7 +72,7 @@ You can verify the live data integration independently by running:
 ```bash
 python test_live_data.py
 ```
-6.Team Members
+👥 Team Members
 Ippili Sahasra – 24BCE5035
 Ananya Arumbakkam – 24BCE5154
 
