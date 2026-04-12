@@ -55,6 +55,10 @@ An interactive, data-driven dashboard designed for real-time monitoring of ocean
 5. **Launch the Dashboard**:
    Open `index.html` in any modern web browser.
 
+6.Team Members
+Ippili Sahasra – 24BCE5035
+Ananya Arumbakkam – 24BCE5154   
+
 ## 📂 Project Structure
 
 - `main.py`: FastAPI server defining endpoints for data retrieval and simulation.
